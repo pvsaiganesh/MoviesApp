@@ -1,7 +1,7 @@
 import {Route, Switch, BrowserRouter} from 'react-router-dom'
 import Login from './components/LoginRoute'
-import Account from './components/AccountRoute'
 import Home from './components/HomeRoute'
+import Account from './components/AccountRoute'
 import Popular from './components/PopularRoute'
 import NotFound from './components/NotFoundRoute'
 import './App.css'

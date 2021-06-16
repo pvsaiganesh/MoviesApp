@@ -1,81 +1,54 @@
 import {Component} from 'react'
+import NavBar from '../NavBar'
 import './index.css'
 
 class Home extends Component {
-  state = {user: '', pass: '', err: ''}
+  state = {trending: [], topRated: [], original: []}
 
-  username = event => {
-    this.setState({user: event.target.value})
+  componentDidMount() {
+    this.getData()
   }
 
-  password = event => {
-    this.setState({pass: event.target.value})
-  }
+  getData = async () => {
+    const response1 = await fetch(
+      'https://api.themoviedb.org/3/trending/all/week?api_key=e866bccfd1d14a1e02e79d7b35669566',
+    )
+    const trending = await response1.json()
+    const formattedTrending = trending.results.map(item => ({
+      backdropPath: item.backdrop_path,
+      posterPath: item.poster_path,
+    }))
+    const response2 = await fetch(
+      'https://api.themoviedb.org/3/movie/top_rated?api_key=e866bccfd1d14a1e02e79d7b35669566&language=en-US',
+    )
+    const topRated = await response2.json()
+    const formattedTopRated = topRated.results.map(item => ({
+      backdropPath: item.backdrop_path,
+      posterPath: item.poster_path,
+    }))
 
-  validateUser = async () => {
-    const {user, pass} = this.state
-    if (user === '' || pass === '') {
-      this.setState({err: 'Please Enter Valid Email and Password'})
-    } else {
-      const url1 =
-        'https://api.themoviedb.org/3/authentication/token/new?api_key=e866bccfd1d14a1e02e79d7b35669566'
-      const response1 = await fetch(url1)
-      const data1 = await response1.json()
-      const userDetails = {
-        username: user,
-        password: pass,
-        request_token: data1.request_token,
-      }
-      console.log(userDetails)
-      const url =
-        'https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=e866bccfd1d14a1e02e79d7b35669566'
-      const options = {method: 'POST', body: JSON.stringify(userDetails)}
-      const response = await fetch(url, options)
-      const data = await response.json()
-      console.log(data)
-    }
+    const response3 = await fetch(
+      'https://api.themoviedb.org/3/discover/tv?api_key=e866bccfd1d14a1e02e79d7b35669566',
+    )
+    const originals = await response3.json()
+
+    const formattedOriginals = originals.results.map(item => ({
+      backdropPath: item.backdrop_path,
+      posterPath: item.poster_path,
+    }))
+
+    this.setState({
+      trending: formattedTrending,
+      topRated: formattedTopRated,
+      originals: formattedOriginals,
+    })
   }
 
   render() {
-    const {err} = this.state
     return (
-      <div className="bg">
-        <div className="sign-in-box">
-          <h1 className="heading">Sign in</h1>
-          <div className="inputs">
-            <div className="input-box">
-              <label className="username-label" htmlFor="user">
-                USERNAME
-              </label>
-              <input
-                placeholder="Rahul"
-                id="user"
-                type="text"
-                className="input"
-                onChange={this.password}
-              />
-            </div>
-            <div className="input-box">
-              <label className="password-label" htmlFor="pass">
-                PASSWORD
-              </label>
-              <input
-                onChange={this.username}
-                id="pass"
-                type="password"
-                className="input"
-              />
-            </div>
-            <button
-              className="button"
-              type="button"
-              onClick={this.validateUser}
-            >
-              Sign in
-            </button>
-          </div>
-          <p>{err}</p>
-        </div>
+      <div>
+        <NavBar />
+        <div>Home</div>
       </div>
     )
   }

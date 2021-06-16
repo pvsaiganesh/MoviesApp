@@ -3,12 +3,25 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 20px;
+  background-color: #131313;
 }
 .links {
   display: flex;
   flex-direction: row;
+  padding: 30px;
 }
 .link {
   padding-right: 10px;
   text-decoration: none;
+  color: #ffffff;
+  padding: 30px;
+}
+.search-logo {
+  height: 40px;
+  width: 40px;
+  padding: 5px;
+}
+.search-input {
+  width: 175px;
+  height: 40px;
 }
